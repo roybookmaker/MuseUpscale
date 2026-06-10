@@ -1,5 +1,9 @@
 # MuseUpscale
 
+<p align="center">
+  <img src="assets/logo.png" alt="MuseUpscale Logo" width="400" />
+</p>
+
 An ultra-performance, Vulkan-accelerated AI video upscaling desktop application for Windows, optimized for AMD & NVIDIA GPUs.
 
 ![MuseUpscale Main Interface](screenshots/main_app.png)

@@ -30,8 +30,8 @@ class MuseUpscaleApp(ctk.CTk):
         super().__init__()
 
         self.title("MuseUpscale - Premium AI Video Upscaler")
-        self.geometry("1000x835")
-        self.minsize(980, 835)
+        self.geometry("1000x935")
+        self.minsize(980, 935)
         self.configure(fg_color=COLOR_BG)
 
         try:
@@ -39,12 +39,13 @@ class MuseUpscaleApp(ctk.CTk):
                 base_dir = getattr(sys, '_MEIPASS', os.path.dirname(sys.executable))
             else:
                 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            self.base_dir = base_dir
             icon_path = os.path.join(base_dir, "assets", "app.ico")
             if os.path.isfile(icon_path):
                 self.iconbitmap(icon_path)
                 self.after(200, lambda: self.iconbitmap(icon_path))
         except Exception:
-            pass
+            self.base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
         self.selected_video = ""
         self.selected_folder = ""
@@ -103,12 +104,25 @@ class MuseUpscaleApp(ctk.CTk):
         self.header_frame.grid(row=0, column=0, sticky="ew", padx=10, pady=(5, 15))
         self.header_frame.grid_columnconfigure(0, weight=1)
 
-        self.title_label = ctk.CTkLabel(
-            self.header_frame,
-            text="MUSE UPSCALE",
-            font=ctk.CTkFont(family="Outfit", size=24, weight="bold"),
-            text_color=COLOR_ACCENT_BLUE
-        )
+        logo_path = os.path.join(self.base_dir, "assets", "logo.png")
+        if os.path.isfile(logo_path):
+            logo_img = Image.open(logo_path)
+            # Dynamically compute size to preserve aspect ratio (target height is 70px)
+            logo_h = 70
+            logo_w = int(logo_h * (logo_img.width / logo_img.height))
+            self.logo_ctk = ctk.CTkImage(light_image=logo_img, dark_image=logo_img, size=(logo_w, logo_h))
+            self.title_label = ctk.CTkLabel(
+                self.header_frame,
+                image=self.logo_ctk,
+                text=""
+            )
+        else:
+            self.title_label = ctk.CTkLabel(
+                self.header_frame,
+                text="MUSE UPSCALE",
+                font=ctk.CTkFont(family="Outfit", size=24, weight="bold"),
+                text_color=COLOR_ACCENT_BLUE
+            )
         self.title_label.grid(row=0, column=0, sticky="w")
 
         self.subtitle_label = ctk.CTkLabel(
